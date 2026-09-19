@@ -1,0 +1,170 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    linear-gradient(rgba(220, 238, 248, 0.82), rgba(220, 238, 248, 0.82)),
+    url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.background-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(225, 240, 248, 0.35);
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 430px;
+  padding: 42px 45px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 24px;
+  box-shadow: 0 15px 45px rgba(0, 60, 120, 0.22);
+  text-align: center;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.heart {
+  width: 92px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 70px;
+  color: #0877d1;
+}
+
+.pulse {
+  position: absolute;
+  font-size: 35px;
+  color: white;
+  font-weight: bold;
+  top: 23px;
+}
+
+.login-card h1 {
+  margin: 5px 0 8px;
+  color: #123d75;
+  font-size: 29px;
+}
+
+.subtitle {
+  margin-bottom: 30px;
+  color: #68788f;
+  font-size: 17px;
+}
+
+.input-group {
+  height: 58px;
+  border: 1px solid #d5dce5;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  background: white;
+}
+
+.icon {
+  font-size: 21px;
+  margin: 0 14px;
+}
+
+.input-group input,
+.input-group select {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  background: transparent;
+  color: #333;
+}
+
+.eye-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 19px;
+  margin-right: 13px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0 24px;
+  font-size: 14px;
+}
+
+.options label {
+  color: #53657c;
+}
+
+.options input {
+  margin-right: 7px;
+}
+
+.forgot {
+  border: none;
+  background: none;
+  color: #0877d1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.main-button {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 10px;
+  background: #0877d1;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.main-button:hover {
+  background: #0565b4;
+}
+
+.switch-text {
+  margin-top: 25px;
+  color: #53657c;
+  font-size: 15px;
+}
+
+.switch-text button {
+  border: none;
+  background: none;
+  color: #0877d1;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.secure-text {
+  margin-top: 22px;
+  color: #718096;
+  font-size: 12px;
+}
