@@ -6,6 +6,7 @@ const API = "http://localhost:8080/api";
 function Patients() {
   const username = localStorage.getItem("username") || "Patient";
   const userId = Number(localStorage.getItem("userId"));
+  const email = localStorage.getItem("email") || "";
 
   const [activePage, setActivePage] = useState("Dashboard");
 
@@ -58,18 +59,52 @@ function Patients() {
 
       const patientsData = await patientsResponse.json();
       const doctorsData = await doctorsResponse.json();
-      const appointmentsData =
-        await appointmentsResponse.json();
+      const appointmentsData = await appointmentsResponse.json();
 
-      const loggedPatient =
-        patientsData.find(
+      // ==========================================
+      // FIND LOGGED-IN PATIENT
+      // ==========================================
+
+      const cleanUsername = String(username)
+        .trim()
+        .toLowerCase();
+
+      const cleanEmail = String(email)
+        .trim()
+        .toLowerCase();
+
+      const emailUsername = cleanEmail.includes("@")
+        ? cleanEmail.split("@")[0]
+        : cleanEmail;
+
+      let loggedPatient = null;
+
+      // 1. First priority: userId
+      if (userId) {
+        loggedPatient = patientsData.find(
           (p) => Number(p.userId) === userId
-        ) ||
-        patientsData.find(
-          (p) =>
-            String(p.patientName).toLowerCase() ===
-            String(username).toLowerCase()
         );
+      }
+
+      // 2. Second priority: username
+      if (!loggedPatient) {
+        loggedPatient = patientsData.find(
+          (p) =>
+            String(p.patientName || "")
+              .trim()
+              .toLowerCase() === cleanUsername
+        );
+      }
+
+      // 3. Third priority: email username
+      if (!loggedPatient && emailUsername) {
+        loggedPatient = patientsData.find(
+          (p) =>
+            String(p.patientName || "")
+              .trim()
+              .toLowerCase() === emailUsername
+        );
+      }
 
       setPatient(loggedPatient || null);
       setDoctors(doctorsData || []);
@@ -130,15 +165,32 @@ function Patients() {
       );
 
       if (!response.ok) {
+        const errorText = await response.text();
+
+        console.error(
+          "Patient update error:",
+          errorText
+        );
+
         throw new Error(
-          "Unable to save patient details"
+          errorText || "Unable to save patient details"
         );
       }
 
-      const updatedPatient =
-        await response.json();
+      const updatedPatient = await response.json();
 
       setPatient(updatedPatient);
+
+      setAge(
+        updatedPatient.age &&
+        Number(updatedPatient.age) !== 0
+          ? updatedPatient.age
+          : ""
+      );
+
+      setGender(updatedPatient.gender || "");
+      setBloodGroup(updatedPatient.bloodGroup || "");
+      setPhone(updatedPatient.phone || "");
 
       alert("Details saved successfully!");
     } catch (error) {
@@ -204,8 +256,7 @@ function Patients() {
         }
       );
 
-      const responseText =
-        await response.text();
+      const responseText = await response.text();
 
       if (!response.ok) {
         console.error(
@@ -252,6 +303,7 @@ function Patients() {
     localStorage.removeItem("username");
     localStorage.removeItem("role");
     localStorage.removeItem("userId");
+    localStorage.removeItem("email");
 
     window.location.reload();
   };
@@ -458,9 +510,7 @@ function Patients() {
 
         </div>
 
-        {/* ======================================
-            DASHBOARD
-           ====================================== */}
+        {/* DASHBOARD */}
 
         {activePage === "Dashboard" && (
           <>
@@ -1019,9 +1069,7 @@ function Patients() {
           </>
         )}
 
-        {/* ======================================
-            APPOINTMENTS
-           ====================================== */}
+        {/* APPOINTMENTS */}
 
         {activePage === "Appointments" && (
           <>
@@ -1268,9 +1316,7 @@ function Patients() {
           </>
         )}
 
-        {/* ======================================
-            DOCTORS
-           ====================================== */}
+        {/* DOCTORS */}
 
         {activePage === "Doctors" && (
 
@@ -1351,9 +1397,7 @@ function Patients() {
 
         )}
 
-        {/* ======================================
-            MEDICAL HISTORY
-           ====================================== */}
+        {/* MEDICAL HISTORY */}
 
         {activePage ===
           "Medical History" && (

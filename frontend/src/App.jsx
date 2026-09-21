@@ -49,32 +49,15 @@ function App() {
       }
 
       if (response.ok) {
-        // Save logged-in user information
-        // Keep username for existing dashboard functionality
-        localStorage.setItem(
-          "username",
-          data.username
-        );
-
-        localStorage.setItem(
-          "role",
-          data.role
-        );
-
-        localStorage.setItem(
-          "userId",
-          data.userId
-        );
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("email", data.email);
 
         if (rememberMe) {
-          localStorage.setItem(
-            "rememberMe",
-            "true"
-          );
+          localStorage.setItem("rememberMe", "true");
         } else {
-          localStorage.removeItem(
-            "rememberMe"
-          );
+          localStorage.removeItem("rememberMe");
         }
 
         setShowDashboard(true);
@@ -104,14 +87,18 @@ function App() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    if (!username.trim() || !password.trim()) {
-      alert("Please enter username and password");
+    if (
+      !username.trim() ||
+      !email.trim() ||
+      !password.trim()
+    ) {
+      alert("Please enter username, email and password");
       return;
     }
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/users",
+        "http://localhost:8080/api/users/signup",
         {
           method: "POST",
           headers: {
@@ -119,6 +106,7 @@ function App() {
           },
           body: JSON.stringify({
             username: username.trim(),
+            email: email.trim(),
             password: password,
             role: role,
           }),
@@ -134,9 +122,7 @@ function App() {
       }
 
       if (response.ok) {
-        alert(
-          "Signup Successful! Please login."
-        );
+        alert("Signup Successful! Please login.");
 
         setUsername("");
         setEmail("");
@@ -144,10 +130,7 @@ function App() {
         setRole("Patient");
         setIsSignup(false);
       } else {
-        console.error(
-          "Signup response:",
-          data
-        );
+        console.error("Signup response:", data);
 
         alert(
           "Signup Failed: " +
@@ -158,10 +141,7 @@ function App() {
         );
       }
     } catch (error) {
-      console.error(
-        "Signup Error:",
-        error
-      );
+      console.error("Signup Error:", error);
 
       alert(
         "Backend connection error. Please make sure Spring Boot is running on port 8080."
@@ -173,10 +153,8 @@ function App() {
   // ROLE BASED DASHBOARD
   // =========================
   if (showDashboard) {
-    const loggedInRole =
-      localStorage.getItem("role");
+    const loggedInRole = localStorage.getItem("role");
 
-    // Patient gets Patient Dashboard
     if (loggedInRole === "Patient") {
       return <Patients />;
     }
@@ -185,7 +163,6 @@ function App() {
       return <DoctorDashboard />;
     }
 
-    // Admin continues with existing Dashboard
     return <Dashboard />;
   }
 
@@ -237,33 +214,27 @@ function App() {
                 placeholder="Username"
                 value={username}
                 onChange={(e) =>
-                  setUsername(
-                    e.target.value
-                  )
+                  setUsername(e.target.value)
                 }
               />
             </div>
           )}
 
-          {/* EMAIL - LOGIN ONLY */}
-          {!isSignup && (
-            <div className="input-group">
-              <span className="icon">
-                👤
-              </span>
+          {/* EMAIL - LOGIN & SIGNUP */}
+          <div className="input-group">
+            <span className="icon">
+              👤
+            </span>
 
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) =>
-                  setEmail(
-                    e.target.value
-                  )
-                }
-              />
-            </div>
-          )}
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+            />
+          </div>
 
           {/* PASSWORD */}
           <div className="input-group">
@@ -280,9 +251,7 @@ function App() {
               placeholder="Password"
               value={password}
               onChange={(e) =>
-                setPassword(
-                  e.target.value
-                )
+                setPassword(e.target.value)
               }
             />
 
@@ -338,9 +307,7 @@ function App() {
               <label>
                 <input
                   type="checkbox"
-                  checked={
-                    rememberMe
-                  }
+                  checked={rememberMe}
                   onChange={(e) =>
                     setRememberMe(
                       e.target.checked
@@ -388,9 +355,7 @@ function App() {
           <button
             type="button"
             onClick={() => {
-              setIsSignup(
-                !isSignup
-              );
+              setIsSignup(!isSignup);
 
               setUsername("");
               setEmail("");

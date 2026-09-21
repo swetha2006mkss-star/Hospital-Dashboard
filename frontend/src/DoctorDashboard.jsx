@@ -3,6 +3,7 @@ import "./DoctorDashboard.css";
 
 function DoctorDashboard() {
   const username = localStorage.getItem("username");
+  const email = localStorage.getItem("email");
 
   const [doctor, setDoctor] = useState(null);
   const [appointments, setAppointments] = useState([]);
@@ -51,23 +52,15 @@ function DoctorDashboard() {
 
       console.log("Doctors from backend:", doctors);
       console.log("Logged in username:", username);
+      console.log("Logged in email:", email);
 
       // ------------------------------------------------
-      // MATCH USERNAME WITH DOCTOR NAME
-      // drjohn -> Dr. John
+      // MATCH LOGGED-IN DOCTOR WITH DOCTOR EMAIL
       // ------------------------------------------------
-      const cleanUsername = (username || "")
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "")
-        .replace(/^dr/, "");
+      const cleanEmail = (email || "").toLowerCase().trim();
 
       const currentDoctor = doctors.find((d) => {
-        const doctorName = (d.doctorName || "")
-          .toLowerCase()
-          .replace(/[^a-z0-9]/g, "")
-          .replace(/^dr/, "");
-
-        return doctorName === cleanUsername;
+        return (d.email || "").toLowerCase().trim() === cleanEmail;
       });
 
       console.log("Current Doctor:", currentDoctor);
@@ -212,8 +205,8 @@ function DoctorDashboard() {
         <h2>Doctor not found</h2>
 
         <p>
-          Unable to find doctor details for username:{" "}
-          <strong>{username}</strong>
+          Unable to find doctor details for email:{" "}
+          <strong>{email || username}</strong>
         </p>
 
         <button onClick={handleLogout}>

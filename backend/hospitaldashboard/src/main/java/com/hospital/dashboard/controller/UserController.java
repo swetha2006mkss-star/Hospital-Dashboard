@@ -45,7 +45,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-
     // ==================================================
     // CREATE USER
     // ==================================================
@@ -80,7 +79,6 @@ public class UserController {
         }
     }
 
-
     // ==================================================
     // LOGIN
     // Email + Password
@@ -104,9 +102,9 @@ public class UserController {
         return ResponseEntity.ok(existingUser);
     }
 
-
     // ==================================================
     // SIGNUP
+    // Username + Email + Password + Role
     // ==================================================
 
     @PostMapping("/signup")
@@ -117,7 +115,13 @@ public class UserController {
 
             User user = new User();
 
-            user.setUsername(signupRequest.getUsername());
+            user.setUsername(
+                    signupRequest.getUsername()
+            );
+
+            user.setEmail(
+                    signupRequest.getEmail()
+            );
 
             user.setPassword(
                     signupRequest.getPassword()
