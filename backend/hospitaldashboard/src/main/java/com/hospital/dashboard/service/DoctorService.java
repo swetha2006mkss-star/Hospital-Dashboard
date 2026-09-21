@@ -23,4 +23,15 @@ public class DoctorService {
     public Doctor saveDoctor(Doctor doctor) {
         return doctorRepository.save(doctor);
     }
+
+    // Update doctor availability status
+    public Doctor updateAvailability(int doctorId, String availabilityStatus) {
+
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        doctor.setAvailabilityStatus(availabilityStatus);
+
+        return doctorRepository.save(doctor);
+    }
 }

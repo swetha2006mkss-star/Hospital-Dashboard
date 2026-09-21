@@ -1,10 +1,11 @@
 package com.hospital.dashboard.service;
 
-import com.hospital.dashboard.entity.Bed;
-import com.hospital.dashboard.repository.BedRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.hospital.dashboard.entity.Bed;
+import com.hospital.dashboard.repository.BedRepository;
 
 @Service
 public class BedService {
@@ -20,6 +21,16 @@ public class BedService {
     }
 
     public Bed saveBed(Bed bed) {
+        return bedRepository.save(bed);
+    }
+
+    public Bed updateStatus(int bedId, String status) {
+
+        Bed bed = bedRepository.findById(bedId)
+                .orElseThrow(() -> new RuntimeException("Bed not found"));
+
+        bed.setStatus(Bed.Status.valueOf(status));
+
         return bedRepository.save(bed);
     }
 }

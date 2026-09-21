@@ -86,6 +86,106 @@ function Dashboard() {
   };
 
   // =====================================================
+  // ADMIN STATUS UPDATES
+  // =====================================================
+
+  const updateDoctorAvailability = async (doctorId, availabilityStatus) => {
+    try {
+      const response = await fetch(
+        `${API}/doctors/${doctorId}/availability`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(availabilityStatus),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update doctor availability");
+      }
+
+      const updatedDoctor = await response.json();
+
+      setDoctors((currentDoctors) =>
+        currentDoctors.map((doctor) =>
+          Number(doctor.doctorId) === Number(doctorId)
+            ? updatedDoctor
+            : doctor
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      setError("Unable to update doctor availability.");
+    }
+  };
+
+  const updateBedStatus = async (bedId, status) => {
+    try {
+      const response = await fetch(
+        `${API}/beds/${bedId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(status),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update bed status");
+      }
+
+      const updatedBed = await response.json();
+
+      setBeds((currentBeds) =>
+        currentBeds.map((bed) =>
+          Number(bed.bedId) === Number(bedId)
+            ? updatedBed
+            : bed
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      setError("Unable to update bed status.");
+    }
+  };
+
+  const updateBillingStatus = async (billId, paymentStatus) => {
+    try {
+      const response = await fetch(
+        `${API}/billing/${billId}/payment-status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(paymentStatus),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update payment status");
+      }
+
+      const updatedBill = await response.json();
+
+      setBilling((currentBilling) =>
+        currentBilling.map((bill) =>
+          Number(bill.billId) === Number(billId)
+            ? updatedBill
+            : bill
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      setError("Unable to update payment status.");
+    }
+  };
+
+  // =====================================================
   // LOGOUT
   // =====================================================
 
@@ -388,6 +488,12 @@ function Dashboard() {
               id="billing"
               icon="₹"
               label="Billing"
+            />
+
+            <SidebarItem
+              id="revenue"
+              icon="◉"
+              label="Revenue"
             />
           </>
         )}
@@ -1146,9 +1252,28 @@ function Dashboard() {
   // STATUS BADGE
   // =====================================================
 
-  function StatusBadge({ status }) {
-    const safeStatus =
-      status || "Scheduled";
+  function StatusBadge({ status, onClick, title }) {
+    const safeStatus = status || "Scheduled";
+
+    if (onClick) {
+      return (
+        <button
+          type="button"
+          className={`status-badge ${safeStatus
+            .toLowerCase()
+            .replace(" ", "-")}`}
+          onClick={onClick}
+          title={title}
+          style={{
+            cursor: "pointer",
+            border: "none",
+            font: "inherit",
+          }}
+        >
+          {safeStatus}
+        </button>
+      );
+    }
 
     return (
       <span
@@ -1819,14 +1944,36 @@ function Dashboard() {
             {
               key: "availabilityStatus",
               label: "Availability",
-              render: (item) => (
-                <StatusBadge
-                  status={
-                    item.availabilityStatus ||
-                    item.status
-                  }
-                />
-              ),
+              render: (item) => {
+                const currentStatus =
+                  item.availabilityStatus ||
+                  item.status ||
+                  "Available";
+
+                const nextStatus =
+                  currentStatus === "Available"
+                    ? "Busy"
+                    : currentStatus === "Busy"
+                    ? "On Leave"
+                    : "Available";
+
+                return (
+                  <select
+                    value={currentStatus}
+                    onChange={(e) =>
+                      updateDoctorAvailability(
+                        item.doctorId,
+                        e.target.value
+                      )
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Busy">Busy</option>
+                    <option value="On Leave">On Leave</option>
+                  </select>
+                );
+              },
             },
           ]}
         />
@@ -1908,11 +2055,31 @@ function Dashboard() {
             {
               key: "status",
               label: "Status",
-              render: (item) => (
-                <StatusBadge
-                  status={item.status}
-                />
-              ),
+              render: (item) => {
+                const currentStatus =
+                  item.status || "Available";
+
+                const nextStatus =
+                  currentStatus === "Available"
+                    ? "Occupied"
+                    : "Available";
+
+                return (
+                  <select
+                    value={currentStatus}
+                    onChange={(e) =>
+                      updateBedStatus(
+                        item.bedId,
+                        e.target.value
+                      )
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Occupied">Occupied</option>
+                  </select>
+                );
+              },
             },
           ]}
         />
@@ -1951,14 +2118,33 @@ function Dashboard() {
             {
               key: "paymentStatus",
               label: "Payment",
-              render: (item) => (
-                <StatusBadge
-                  status={
-                    item.paymentStatus ||
-                    item.status
-                  }
-                />
-              ),
+              render: (item) => {
+                const currentStatus =
+                  item.paymentStatus ||
+                  item.status ||
+                  "Pending";
+
+                const nextStatus =
+                  currentStatus === "Paid"
+                    ? "Pending"
+                    : "Paid";
+
+                return (
+                  <select
+                    value={currentStatus}
+                    onChange={(e) =>
+                      updateBillingStatus(
+                        item.billId,
+                        e.target.value
+                      )
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                  </select>
+                );
+              },
             },
             {
               key: "billDate",
@@ -1970,6 +2156,147 @@ function Dashboard() {
             },
           ]}
         />
+      );
+    }
+
+    if (
+      role === "Admin" &&
+      currentPage === "revenue"
+    ) {
+      const paidBills = billing.filter(
+        (bill) =>
+          (bill.paymentStatus || bill.status) === "Paid"
+      );
+
+      const pendingBills = billing.filter(
+        (bill) =>
+          (bill.paymentStatus || bill.status) === "Pending"
+      );
+
+      const paidAmount = paidBills.reduce(
+        (total, bill) =>
+          total + Number(bill.amount || 0),
+        0
+      );
+
+      const pendingAmount = pendingBills.reduce(
+        (total, bill) =>
+          total + Number(bill.amount || 0),
+        0
+      );
+
+      return (
+        <>
+          <Header
+            title="Revenue Overview"
+            subtitle="Monitor hospital revenue and payment collection."
+          />
+
+          <div className="stats-grid">
+            <div className="stat-card">
+              <div className="stat-icon">₹</div>
+              <div>
+                <span>Total Revenue</span>
+                <strong>₹{(paidAmount + pendingAmount).toLocaleString("en-IN")}</strong>
+              </div>
+            </div>
+
+            <div className="stat-card">
+              <div className="stat-icon">✓</div>
+              <div>
+                <span>Paid Revenue</span>
+                <strong>₹{paidAmount.toLocaleString("en-IN")}</strong>
+              </div>
+            </div>
+
+            <div className="stat-card">
+              <div className="stat-icon">◷</div>
+              <div>
+                <span>Pending Revenue</span>
+                <strong>₹{pendingAmount.toLocaleString("en-IN")}</strong>
+              </div>
+            </div>
+
+            <div className="stat-card">
+              <div className="stat-icon">#</div>
+              <div>
+                <span>Total Bills</span>
+                <strong>{billing.length}</strong>
+              </div>
+            </div>
+          </div>
+
+          <section className="panel">
+            <div className="panel-header">
+              <div>
+                <h2>Revenue & Payment Records</h2>
+                <p>Paid and pending billing records.</p>
+              </div>
+              <button
+                className="refresh-button large"
+                onClick={loadDashboardData}
+              >
+                ↻ Refresh
+              </button>
+            </div>
+
+            <div className="professional-table-wrapper">
+              <table className="professional-table full-table">
+                <thead>
+                  <tr>
+                    <th>Bill ID</th>
+                    <th>Patient ID</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {billing.length > 0 ? (
+                    billing.map((bill) => {
+                      const currentStatus =
+                        bill.paymentStatus ||
+                        bill.status ||
+                        "Pending";
+
+                      const nextStatus =
+                        currentStatus === "Paid"
+                          ? "Pending"
+                          : "Paid";
+
+                      return (
+                        <tr key={bill.billId}>
+                          <td>{bill.billId}</td>
+                          <td>{bill.patientId ?? bill.patient?.patientId ?? "-"}</td>
+                          <td>₹{Number(bill.amount || 0).toLocaleString("en-IN")}</td>
+                          <td>
+                            <StatusBadge
+                              status={currentStatus}
+                              title={`Click to change to ${nextStatus}`}
+                              onClick={() =>
+                                updateBillingStatus(
+                                  bill.billId,
+                                  nextStatus
+                                )
+                              }
+                            />
+                          </td>
+                          <td>{formatDate(bill.billDate)}</td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="empty-table">
+                        No billing records found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </>
       );
     }
 

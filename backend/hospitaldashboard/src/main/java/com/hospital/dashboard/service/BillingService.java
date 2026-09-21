@@ -1,10 +1,11 @@
 package com.hospital.dashboard.service;
 
-import com.hospital.dashboard.entity.Billing;
-import com.hospital.dashboard.repository.BillingRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.hospital.dashboard.entity.Billing;
+import com.hospital.dashboard.repository.BillingRepository;
 
 @Service
 public class BillingService {
@@ -21,5 +22,19 @@ public class BillingService {
 
     public Billing saveBill(Billing billing) {
         return billingRepository.save(billing);
+    }
+
+    public Billing updatePaymentStatus(
+            int billId,
+            String paymentStatus) {
+
+        Billing bill = billingRepository.findById(billId)
+                .orElseThrow(() -> new RuntimeException("Bill not found"));
+
+        bill.setPaymentStatus(
+                Billing.PaymentStatus.valueOf(paymentStatus)
+        );
+
+        return billingRepository.save(bill);
     }
 }
