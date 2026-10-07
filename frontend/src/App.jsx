@@ -27,7 +27,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/users/login",
+        "https://hospital-dashboard-production-a1aa.up.railway.app/api/users/login",
         {
           method: "POST",
           headers: {
@@ -87,18 +87,14 @@ function App() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    if (
-      !username.trim() ||
-      !email.trim() ||
-      !password.trim()
-    ) {
+    if (!username.trim() || !email.trim() || !password.trim()) {
       alert("Please enter username, email and password");
       return;
     }
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/users/signup",
+        "https://hospital-dashboard-production-a1aa.up.railway.app/api/users/signup",
         {
           method: "POST",
           headers: {
@@ -174,128 +170,78 @@ function App() {
       <div className="background-overlay"></div>
 
       <div className="login-card">
-
         <div className="logo">
           <div className="heart">
             ♥
-            <span className="pulse">
-              ⌁
-            </span>
+            <span className="pulse">⌁</span>
           </div>
         </div>
 
-        <h1>
-          Hospital Dashboard
-        </h1>
+        <h1>Hospital Dashboard</h1>
 
         <p className="subtitle">
-          {isSignup
-            ? "Create your account"
-            : "Sign in to your account"}
+          {isSignup ? "Create your account" : "Sign in to your account"}
         </p>
 
-        <form
-          onSubmit={
-            isSignup
-              ? handleSignup
-              : handleLogin
-          }
-        >
-
+        <form onSubmit={isSignup ? handleSignup : handleLogin}>
           {/* USERNAME - SIGNUP ONLY */}
           {isSignup && (
             <div className="input-group">
-              <span className="icon">
-                👤
-              </span>
+              <span className="icon">👤</span>
 
               <input
                 type="text"
                 placeholder="Username"
                 value={username}
-                onChange={(e) =>
-                  setUsername(e.target.value)
-                }
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
           )}
 
           {/* EMAIL - LOGIN & SIGNUP */}
           <div className="input-group">
-            <span className="icon">
-              👤
-            </span>
+            <span className="icon">👤</span>
 
             <input
               type="email"
               placeholder="Email"
               value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           {/* PASSWORD */}
           <div className="input-group">
-            <span className="icon">
-              🔒
-            </span>
+            <span className="icon">🔒</span>
 
             <input
-              type={
-                showPassword
-                  ? "text"
-                  : "password"
-              }
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <button
               type="button"
               className="eye-button"
-              onClick={() =>
-                setShowPassword(
-                  !showPassword
-                )
-              }
+              onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword
-                ? "🙈"
-                : "👁️"}
+              {showPassword ? "🙈" : "👁️"}
             </button>
           </div>
 
           {/* ROLE - SIGNUP ONLY */}
           {isSignup && (
             <div className="input-group">
-              <span className="icon">
-                🏥
-              </span>
+              <span className="icon">🏥</span>
 
               <select
                 value={role}
-                onChange={(e) =>
-                  setRole(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setRole(e.target.value)}
               >
-                <option value="Admin">
-                  Admin
-                </option>
-
-                <option value="Doctor">
-                  Doctor
-                </option>
-
-                <option value="Patient">
-                  Patient
-                </option>
+                <option value="Admin">Admin</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Patient">Patient</option>
               </select>
             </div>
           )}
@@ -303,16 +249,11 @@ function App() {
           {/* REMEMBER ME */}
           {!isSignup && (
             <div className="options">
-
               <label>
                 <input
                   type="checkbox"
                   checked={rememberMe}
-                  onChange={(e) =>
-                    setRememberMe(
-                      e.target.checked
-                    )
-                  }
+                  onChange={(e) => setRememberMe(e.target.checked)}
                 />
 
                 Remember me
@@ -322,32 +263,22 @@ function App() {
                 type="button"
                 className="forgot"
                 onClick={() =>
-                  alert(
-                    "Please contact the administrator."
-                  )
+                  alert("Please contact the administrator.")
                 }
               >
                 Forgot Password?
               </button>
-
             </div>
           )}
 
           {/* MAIN BUTTON */}
-          <button
-            type="submit"
-            className="main-button"
-          >
-            {isSignup
-              ? "Create Account"
-              : "Login"}
+          <button type="submit" className="main-button">
+            {isSignup ? "Create Account" : "Login"}
           </button>
-
         </form>
 
         {/* LOGIN / SIGNUP SWITCH */}
         <div className="switch-text">
-
           {isSignup
             ? "Already have an account?"
             : "Don't have an account?"}
@@ -362,19 +293,14 @@ function App() {
               setPassword("");
             }}
           >
-            {isSignup
-              ? " Login"
-              : " Sign up"}
+            {isSignup ? " Login" : " Sign up"}
           </button>
-
         </div>
 
         {/* SECURITY TEXT */}
         <div className="secure-text">
-          🔐 Secure & Reliable Healthcare
-          Management
+          🔐 Secure & Reliable Healthcare Management
         </div>
-
       </div>
     </div>
   );

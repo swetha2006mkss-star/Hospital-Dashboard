@@ -41,7 +41,7 @@ function DoctorDashboard() {
       // GET DOCTORS
       // ------------------------------------------------
       const doctorsResponse = await fetch(
-        "http://localhost:8080/api/doctors"
+        "https://hospital-dashboard-production-a1aa.up.railway.app/api/doctors"
       );
 
       if (!doctorsResponse.ok) {
@@ -77,7 +77,7 @@ function DoctorDashboard() {
       // GET DOCTOR APPOINTMENTS
       // ------------------------------------------------
       const appointmentResponse = await fetch(
-        `http://localhost:8080/api/appointments/doctor/${currentDoctor.doctorId}`
+        `https://hospital-dashboard-production-a1aa.up.railway.app/api/appointments/doctor/${currentDoctor.doctorId}`
       );
 
       if (!appointmentResponse.ok) {
@@ -97,7 +97,7 @@ function DoctorDashboard() {
       // GET PATIENTS
       // ------------------------------------------------
       const patientResponse = await fetch(
-        "http://localhost:8080/api/patients"
+        "https://hospital-dashboard-production-a1aa.up.railway.app/api/patients"
       );
 
       if (patientResponse.ok) {

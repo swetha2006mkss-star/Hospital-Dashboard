@@ -87,19 +87,30 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
 
-        User existingUser = userService.login(
-                user.getEmail(),
-                user.getPassword()
-        );
+        try {
 
-        if (existingUser == null) {
+            User existingUser = userService.login(
+                    user.getEmail(),
+                    user.getPassword()
+            );
+
+            if (existingUser == null) {
+
+                return ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .body("Invalid Email or Password");
+            }
+
+            return ResponseEntity.ok(existingUser);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
 
             return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid Email or Password");
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Login Error: " + e.getMessage());
         }
-
-        return ResponseEntity.ok(existingUser);
     }
 
     // ==================================================

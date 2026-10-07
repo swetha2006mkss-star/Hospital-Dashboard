@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./Dashboard.css";
 
-const API = "http://localhost:8080/api";
+const API = "https://hospital-dashboard-production-a1aa.up.railway.app/api";
 
 function Dashboard() {
   const username = localStorage.getItem("username") || "User";
