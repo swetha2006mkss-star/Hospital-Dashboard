@@ -187,4 +187,18 @@ public class UserController {
                 "Doctor passwords updated successfully"
         );
     }
+
+    // ==================================================
+    // TEMPORARY: DELETE DUPLICATE JOHN USER
+    // ==================================================
+
+    @PostMapping("/delete-duplicate-john")
+    public ResponseEntity<?> deleteDuplicateJohnUser() {
+
+        userService.deleteDuplicateJohnUser();
+
+        return ResponseEntity.ok(
+                "Duplicate John user deleted successfully"
+        );
+    }
 }

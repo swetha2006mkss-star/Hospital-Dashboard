@@ -93,8 +93,9 @@ public class UserService {
         return user;
     }
 
-    // Temporary method:
-    // Convert all 10 existing Doctor passwords to BCrypt
+    // ==================================================
+    // TEMPORARY: UPDATE DOCTOR PASSWORDS
+    // ==================================================
 
     public void updateDoctorPasswords() {
 
@@ -118,20 +119,43 @@ public class UserService {
 
         updatePassword("drnisha@gmail.com", "nisha");
     }
+
+    // ==================================================
+    // TEMPORARY: UPDATE PATIENT PASSWORDS
+    // ==================================================
+
     public void updatePatientPasswords() {
 
-    updatePassword("patient1@gmail.com", "recep123");
-    updatePassword("kalai@gmail.com", "123");
-    updatePassword("yoga@gmail.com", "123");
-    updatePassword("abi@gmail.com", "098");
-    updatePassword("rathi@gmail.com", "123");
-    updatePassword("anitha@gmail.com", "anitha");
-    updatePassword("rithika@gmail.com", "rithu");
-    updatePassword("sharu@gmail.com", "sharu");
-}
-public void updateAdminPassword() {
-    updatePassword("admin@gmail.com", "admin");
-}
+        updatePassword("patient1@gmail.com", "recep123");
+
+        updatePassword("kalai@gmail.com", "123");
+
+        updatePassword("yoga@gmail.com", "123");
+
+        updatePassword("abi@gmail.com", "098");
+
+        updatePassword("rathi@gmail.com", "123");
+
+        updatePassword("anitha@gmail.com", "anitha");
+
+        updatePassword("rithika@gmail.com", "rithu");
+
+        updatePassword("sharu@gmail.com", "sharu");
+    }
+
+    // ==================================================
+    // TEMPORARY: UPDATE ADMIN PASSWORD
+    // ==================================================
+
+    public void updateAdminPassword() {
+
+        updatePassword("admin@gmail.com", "admin");
+    }
+
+    // ==================================================
+    // PASSWORD UPDATE HELPER
+    // ==================================================
+
     private void updatePassword(
             String email,
             String plainPassword) {
@@ -145,6 +169,18 @@ public void updateAdminPassword() {
             );
 
             userRepository.save(user);
+        }
+    }
+
+    // ==================================================
+    // TEMPORARY: DELETE DUPLICATE JOHN USER
+    // ==================================================
+
+    public void deleteDuplicateJohnUser() {
+
+        if (userRepository.existsById(3)) {
+
+            userRepository.deleteById(3);
         }
     }
 }
