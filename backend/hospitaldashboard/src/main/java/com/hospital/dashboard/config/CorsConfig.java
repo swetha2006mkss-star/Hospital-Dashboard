@@ -15,10 +15,11 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                "http://localhost:5173",
-                                "http://localhost:5174",
-                                "http://localhost:5175"
-                        )
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+    "https://hospital-dashboard-54se.vercel.app"
+)
                         .allowedMethods(
                                 "GET",
                                 "POST",
